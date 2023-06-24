@@ -10,7 +10,7 @@ difficultyLevels = {
   extremelyhard: 50,
 };
 
-difficultyChoice = "medium";
+difficultyChoice = "hard";
 
 function nextSequence() {
   randomNumber = Math.floor(Math.random() * 4);
@@ -20,12 +20,21 @@ function nextSequence() {
   gamePattern.push(randomChosenColor);
 
   gamePattern.forEach((element) => {
-    $(`#${element}`).fadeOut(difficultyLevels[difficultyChoice]);
-
+    animatePress(element);
     playSound(element);
-
-    $(`#${element}`).fadeIn(difficultyLevels[difficultyChoice]);
   });
+}
+
+function animatePress(name) {
+  // Method 1: Using fadeOut/fadeIn
+  // $(`#${name}`).fadeOut(difficultyLevels[difficultyChoice]);
+  // $(`#${name}`).fadeIn(difficultyLevels[difficultyChoice]);
+
+  // Method 2: using classes
+  $(`.${name}`).addClass("pressed");
+  setTimeout(() => {
+    $(`.${name}`).removeClass("pressed");
+  }, difficultyLevels[difficultyChoice]);
 }
 
 function playSound(name) {
@@ -34,5 +43,6 @@ function playSound(name) {
 
 $(".btn").click(function () {
   userClickPattern.push(this.id);
+  animatePress(this.id);
   playSound(this.id);
 });
