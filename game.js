@@ -34,5 +34,5 @@ function playSound(name) {
 
 $(".btn").click(function () {
   userClickPattern.push(this.id);
-  console.log(userClickPattern);
+  playSound(this.id);
 });
