@@ -1,40 +1,40 @@
-buttonColors = ["red", "blue", "green", "yellow"];
-gamePattern = [];
-userClickPattern = [];
+let level = 0;
+let buttonColors = ["red", "blue", "green", "yellow"];
+let gamePattern = [];
+let userClickPattern = [];
+let gameStarted = false;
 
 difficultyLevels = {
-  veryEasy: 1000,
   easy: 500,
   medium: 250,
   hard: 100,
-  extremelyhard: 50,
 };
 
-difficultyChoice = "hard";
+difficultyChoice = "medium";
 
 function nextSequence() {
+  level++;
+  $("#level-title").text(`Level ${level}`);
+
   randomNumber = Math.floor(Math.random() * 4);
 
   randomChosenColor = buttonColors[randomNumber];
 
   gamePattern.push(randomChosenColor);
 
-  gamePattern.forEach((element) => {
-    animatePress(element);
-    playSound(element);
+  gamePattern.forEach((element, i) => {
+    setTimeout(() => {
+      animatePress(element);
+      playSound(element);
+    }, i * difficultyLevels[difficultyChoice]);
   });
 }
 
 function animatePress(name) {
-  // Method 1: Using fadeOut/fadeIn
-  // $(`#${name}`).fadeOut(difficultyLevels[difficultyChoice]);
-  // $(`#${name}`).fadeIn(difficultyLevels[difficultyChoice]);
-
-  // Method 2: using classes
   $(`.${name}`).addClass("pressed");
   setTimeout(() => {
     $(`.${name}`).removeClass("pressed");
-  }, difficultyLevels[difficultyChoice]);
+  }, 100);
 }
 
 function playSound(name) {
@@ -45,4 +45,11 @@ $(".btn").click(function () {
   userClickPattern.push(this.id);
   animatePress(this.id);
   playSound(this.id);
+});
+
+$(document).keydown(function () {
+  if (!gameStarted) {
+    nextSequence();
+    gameStarted = true;
+  }
 });
