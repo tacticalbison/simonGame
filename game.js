@@ -1,5 +1,6 @@
 buttonColors = ["red", "blue", "green", "yellow"];
 gamePattern = [];
+userClickPattern = [];
 
 difficultyLevels = {
   veryEasy: 1000,
@@ -31,4 +32,7 @@ function playSound(name) {
   new Audio(`./sounds/${name}.mp3`).play();
 }
 
-nextSequence();
+$(".btn").click(function () {
+  userClickPattern.push(this.id);
+  console.log(userClickPattern);
+});
