@@ -12,7 +12,33 @@ difficultyLevels = {
 
 difficultyChoice = "medium";
 
+function animatePress(name) {
+  $(`.${name}`).addClass("pressed");
+  setTimeout(() => {
+    $(`.${name}`).removeClass("pressed");
+  }, 100);
+}
+
+function checkAnswer() {
+  for (let i = 0; i < userClickPattern.length; i++) {
+    if (userClickPattern[i] !== gamePattern[i]) {
+      playSound("wrong");
+      gameStarted = false;
+      $("#level-title").text(`Game Over! Press a key to try again!`);
+      resetGame();
+      return;
+    }
+  }
+  if (userClickPattern.length === gamePattern.length && gameStarted) {
+    setTimeout(() => {
+      nextSequence();
+    }, 1000);
+  }
+}
+
 function nextSequence() {
+  userClickPattern = [];
+
   level++;
   $("#level-title").text(`Level ${level}`);
 
@@ -30,26 +56,27 @@ function nextSequence() {
   });
 }
 
-function animatePress(name) {
-  $(`.${name}`).addClass("pressed");
-  setTimeout(() => {
-    $(`.${name}`).removeClass("pressed");
-  }, 100);
-}
-
 function playSound(name) {
   new Audio(`./sounds/${name}.mp3`).play();
 }
 
-$(".btn").click(function () {
-  userClickPattern.push(this.id);
-  animatePress(this.id);
-  playSound(this.id);
-});
+function resetGame() {
+  gamePattern = [];
+  level = 0;
+}
 
 $(document).keydown(function () {
   if (!gameStarted) {
     nextSequence();
     gameStarted = true;
+  }
+});
+
+$(".btn").click(function () {
+  if (gameStarted) {
+    userClickPattern.push(this.id);
+    animatePress(this.id);
+    playSound(this.id);
+    checkAnswer();
   }
 });
