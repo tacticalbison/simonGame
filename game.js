@@ -23,8 +23,11 @@ function checkAnswer() {
   for (let i = 0; i < userClickPattern.length; i++) {
     if (userClickPattern[i] !== gamePattern[i]) {
       playSound("wrong");
-      gameStarted = false;
-      $("#level-title").text(`Game Over! Press a key to try again!`);
+      $("body").addClass("game-over");
+      setTimeout(() => {
+        $("body").removeClass("game-over");
+      }, 250);
+      $("#level-title").text(`Game Over! Press any key to try again!`);
       resetGame();
       return;
     }
@@ -61,6 +64,7 @@ function playSound(name) {
 }
 
 function resetGame() {
+  gameStarted = false;
   gamePattern = [];
   level = 0;
 }
